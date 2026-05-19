@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transfórmate · Iniciar sesión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="auth-wrap">
+    <!-- Lado izquierdo: hero / marca -->
+    <aside class="auth-hero">
+      <div class="auth-hero-brand">Transfórmate <span>en quien quieres ser</span></div>
+
+      <div class="auth-hero-content">
+        <h1>Ya conoces<br/>la energía,<br/>ahora aprenderás<br/>a usarla.</h1>
+        <p>Todo lo que necesitas para reinventarte.</p>
+      </div>
+
+      <div class="auth-hero-footer">
+        <span>✨ +50 contenidos</span>
+        <span>🌙 Rituales guiados</span>
+        <span>🎵 432Hz · 528Hz</span>
+      </div>
+    </aside>
+
+    <!-- Lado derecho: formulario -->
+    <main class="auth-form-side">
+      <div class="auth-card">
+        <h2>Bienvenida de vuelta</h2>
+        <p class="sub">Ingresa para continuar con tu práctica.</p>
+
+        <div id="error" class="error-msg"></div>
+
+        <form id="loginForm" autocomplete="on">
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" placeholder="tu@correo.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" placeholder="••••••••" required />
+          </div>
+
+          <div class="form-extra">
+            <label><input type="checkbox" /> Recordarme</label>
+            <a href="#">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Entrar a mi espacio</button>
+        </form>
+
+        <div class="divider">o</div>
+
+        <a href="registro.html" class="btn btn-ghost" style="width:100%">Crear cuenta nueva</a>
+
+        <div class="auth-bottom">
+          ¿Aún no tienes cuenta? <a href="registro.html">Regístrate aquí</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (async () => {
+      // Si ya hay sesión, ir directo al dashboard
+      if (await usuarioActivo()) {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      const form = document.getElementById('loginForm');
+      const errorBox = document.getElementById('error');
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorBox.classList.remove('show');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Entrando…';
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const r = await iniciarSesion({ email, password });
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Entrar a mi espacio';
+
+        if (!r.ok) {
+          errorBox.textContent = r.error;
+          errorBox.classList.add('show');
+          return;
+        }
+        window.location.href = 'dashboard.html';
+      });
+    })();
+  </script>
+</body>
+</html>

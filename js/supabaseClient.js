@@ -44,7 +44,7 @@ function categoriasComprables() {
 // ============================================================
 //  DETECCIÓN DE MERCADO (Europa = EUR, resto del mundo = USD)
 // ============================================================
-let MERCADO = 'EUR'; // por defecto
+let MERCADO = 'EUR';
 
 const PAISES_EUR = [
   'ES','PT','FR','IT','DE','NL','BE','AT','IE','GR','FI','SE','DK',
@@ -53,7 +53,6 @@ const PAISES_EUR = [
 ];
 
 async function detectarMercado() {
-  // Cache: si ya lo detectamos antes, úsalo directo
   const cached = localStorage.getItem('mercado');
   if (cached === 'EUR' || cached === 'USD') {
     MERCADO = cached;
@@ -71,7 +70,6 @@ async function detectarMercado() {
   }
 }
 
-// Formatea el precio según el mercado actual
 function formatPrecio(categoria) {
   if (MERCADO === 'USD') {
     const usd = categoria.precio_usd != null ? categoria.precio_usd : categoria.precio;
@@ -81,18 +79,16 @@ function formatPrecio(categoria) {
 }
 
 // ============================================================
-//  STRIPE PAYMENT LINKS
-//  · 'mantras' = Meditaciones Guiadas (producto individual)
-//  · 'pack'    = resto de categorías (1 compra → todo desbloqueado)
+//  STRIPE PAYMENT LINKS (modo TEST)
 // ============================================================
 const STRIPE_LINKS = {
   pack: {
-    EUR: 'https://buy.stripe.com/8x27sKcIHfYj5EA8am4ZG01',
-    USD: 'https://buy.stripe.com/4gM8wO7on7rNeb63U64ZG02',
+    EUR: 'https://buy.stripe.com/test_8x27sKcIHfYj5EA8am4ZG01',
+    USD: 'https://buy.stripe.com/test_4gM8wO7on7rNeb63U64ZG02',
   },
   mantras: {
-    EUR: 'https://buy.stripe.com/bJe4gy0ZZ3bxgjeeyK4ZG03',
-    USD: 'https://buy.stripe.com/cNi3cucIH7rNeb6aiu4ZG04',
+    EUR: 'https://buy.stripe.com/test_bJe4gy0ZZ3bxgjeeyK4ZG03',
+    USD: 'https://buy.stripe.com/test_bJe00i5gf27t3ws2Q24ZG05',
   },
 };
 
@@ -101,8 +97,6 @@ function obtenerLinkStripe(categoria, perfil) {
   const moneda = MERCADO === 'USD' ? 'USD' : 'EUR';
   const base   = STRIPE_LINKS[tipo][moneda];
   if (!base) return null;
-  // Añadimos el user_id como client_reference_id (lo usaremos para el webhook
-  // que desbloquea automáticamente al pagar) y prefijamos el email.
   const url = new URL(base);
   if (perfil?.id) url.searchParams.set('client_reference_id', perfil.id);
   if (perfil?.email) url.searchParams.set('prefilled_email', perfil.email);

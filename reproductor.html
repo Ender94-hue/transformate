@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transfórmate · Reproductor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="player-page">
+    <div class="player-wrap">
+      <a href="dashboard.html" class="back-link">← Volver al catálogo</a>
+
+      <div class="player-art" id="art">🌅</div>
+      <h1 id="titulo">Cargando…</h1>
+      <p class="player-cat" id="meta"></p>
+
+      <div class="player-bar">
+        <div class="progress" id="progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="time-row">
+          <span id="timeNow">0:00</span>
+          <span id="timeTotal">0:00</span>
+        </div>
+        <div class="controls">
+          <button class="control-btn" id="back15" title="Atrás 15s">⏪</button>
+          <button class="control-btn play-big" id="playBtn">▶</button>
+          <button class="control-btn" id="fwd15" title="Adelante 15s">⏩</button>
+        </div>
+      </div>
+
+      <p style="margin-top:30px;color:var(--texto-suave);font-size:13px;max-width:480px;margin-left:auto;margin-right:auto" id="descripcion"></p>
+    </div>
+  </div>
+
+  <audio id="audio" preload="metadata"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    let producto = null;
+
+    (async () => {
+      await requerirSesion();
+
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+
+      // Traer el producto desde Supabase
+      const { data } = await supa.from('productos').select('*').eq('id', id).maybeSingle();
+      if (!data) { window.location.href = 'dashboard.html'; return; }
+
+      // Verificar que el usuario lo tenga desbloqueado
+      await cargarDesbloqueos();
+      if (!tieneDesbloqueado(id)) { window.location.href = 'dashboard.html'; return; }
+
+      producto = {
+        id: data.id, titulo: data.titulo, categoria: data.categoria,
+        duracion: data.duracion, nivel: data.nivel, icono: data.icono,
+        descripcion: data.descripcion, audio: data.audio_url,
+      };
+
+      document.getElementById('art').textContent = producto.icono;
+      document.getElementById('titulo').textContent = producto.titulo;
+      const cat = CATEGORIAS.find(c => c.slug === producto.categoria);
+      document.getElementById('meta').textContent = `${cat ? cat.label : producto.categoria} · ${producto.duracion}`;
+      document.getElementById('descripcion').textContent = producto.descripcion;
+
+      iniciarReproductor();
+    })();
+
+    function iniciarReproductor() {
+      // Si el producto trae un archivo .audio lo usamos,
+      // si no, simulamos la barra de progreso con un timer.
+      const audio = document.getElementById('audio');
+      const playBtn = document.getElementById('playBtn');
+      const art = document.getElementById('art');
+      const progressBar = document.getElementById('progressBar');
+      const progress = document.getElementById('progress');
+      const timeNow = document.getElementById('timeNow');
+      const timeTotal = document.getElementById('timeTotal');
+
+      const usandoAudio = !!(producto && producto.audio);
+      const duracionFalsa = 900;
+      let progresoFalso = 0;
+      let timer = null;
+      let reproduciendo = false;
+
+      if (usandoAudio) {
+        audio.src = producto.audio;
+        audio.addEventListener('loadedmetadata', () => {
+          timeTotal.textContent = formato(audio.duration);
+        });
+        audio.addEventListener('timeupdate', () => {
+          const pct = (audio.currentTime / audio.duration) * 100;
+          progressBar.style.width = pct + '%';
+          timeNow.textContent = formato(audio.currentTime);
+        });
+        audio.addEventListener('ended', () => {
+          reproduciendo = false;
+          playBtn.textContent = '▶';
+          art.classList.remove('playing');
+        });
+      } else {
+        timeTotal.textContent = formato(duracionFalsa);
+      }
+
+      playBtn.addEventListener('click', () => {
+        if (reproduciendo) {
+          if (usandoAudio) audio.pause();
+          clearInterval(timer);
+          reproduciendo = false;
+          playBtn.textContent = '▶';
+          art.classList.remove('playing');
+        } else {
+          if (usandoAudio) {
+            audio.play();
+          } else {
+            timer = setInterval(() => {
+              progresoFalso += 1;
+              if (progresoFalso >= duracionFalsa) {
+                progresoFalso = 0;
+                clearInterval(timer);
+                reproduciendo = false;
+                playBtn.textContent = '▶';
+                art.classList.remove('playing');
+              }
+              progressBar.style.width = (progresoFalso / duracionFalsa * 100) + '%';
+              timeNow.textContent = formato(progresoFalso);
+            }, 1000);
+          }
+          reproduciendo = true;
+          playBtn.textContent = '⏸';
+          art.classList.add('playing');
+        }
+      });
+
+      document.getElementById('back15').addEventListener('click', () => {
+        if (usandoAudio) audio.currentTime = Math.max(0, audio.currentTime - 15);
+        else progresoFalso = Math.max(0, progresoFalso - 15);
+      });
+      document.getElementById('fwd15').addEventListener('click', () => {
+        if (usandoAudio) audio.currentTime = Math.min(audio.duration, audio.currentTime + 15);
+        else progresoFalso = Math.min(duracionFalsa, progresoFalso + 15);
+      });
+
+      progress.addEventListener('click', (e) => {
+        const pct = (e.offsetX / progress.offsetWidth);
+        if (usandoAudio && audio.duration) audio.currentTime = pct * audio.duration;
+        else progresoFalso = Math.floor(pct * duracionFalsa);
+      });
+    }
+
+    function formato(seg) {
+      seg = Math.floor(seg || 0);
+      const m = Math.floor(seg / 60);
+      const s = seg % 60;
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+  </script>
+</body>
+</html>

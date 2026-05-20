@@ -218,6 +218,11 @@ function render() {
   const chipsEl = document.getElementById('chips');
   const carouselesEl = document.getElementById('carouseles');
   const grid = document.getElementById('grid');
+  const mainHeader = document.getElementById('mainHeader');
+
+  // El encabezado (saludo + título + buscador) se oculta en Bienvenidos
+  // para que el video suba, y se muestra en el resto de secciones.
+  if (mainHeader) mainHeader.style.display = (filtroCategoria === 'todos') ? 'none' : 'flex';
 
   // ---- Modo "Bienvenidos" (página inicial con video) ----
   if (filtroCategoria === 'todos') {

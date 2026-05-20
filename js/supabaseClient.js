@@ -44,7 +44,7 @@ function categoriasComprables() {
 // ============================================================
 //  DETECCIÓN DE MERCADO (Europa = EUR, resto del mundo = USD)
 // ============================================================
-let MERCADO = 'EUR';
+let MERCADO = 'EUR'; // por defecto
 
 const PAISES_EUR = [
   'ES','PT','FR','IT','DE','NL','BE','AT','IE','GR','FI','SE','DK',
@@ -53,6 +53,7 @@ const PAISES_EUR = [
 ];
 
 async function detectarMercado() {
+  // Cache: si ya lo detectamos antes, úsalo directo
   const cached = localStorage.getItem('mercado');
   if (cached === 'EUR' || cached === 'USD') {
     MERCADO = cached;
@@ -70,6 +71,7 @@ async function detectarMercado() {
   }
 }
 
+// Formatea el precio según el mercado actual
 function formatPrecio(categoria) {
   if (MERCADO === 'USD') {
     const usd = categoria.precio_usd != null ? categoria.precio_usd : categoria.precio;
@@ -79,7 +81,9 @@ function formatPrecio(categoria) {
 }
 
 // ============================================================
-//  STRIPE PAYMENT LINKS (modo TEST)
+//  STRIPE PAYMENT LINKS
+//  · 'mantras' = Meditaciones Guiadas (producto individual)
+//  · 'pack'    = resto de categorías (1 compra → todo desbloqueado)
 // ============================================================
 const STRIPE_LINKS = {
   pack: {
@@ -97,6 +101,8 @@ function obtenerLinkStripe(categoria, perfil) {
   const moneda = MERCADO === 'USD' ? 'USD' : 'EUR';
   const base   = STRIPE_LINKS[tipo][moneda];
   if (!base) return null;
+  // Añadimos el user_id como client_reference_id (lo usaremos para el webhook
+  // que desbloquea automáticamente al pagar) y prefijamos el email.
   const url = new URL(base);
   if (perfil?.id) url.searchParams.set('client_reference_id', perfil.id);
   if (perfil?.email) url.searchParams.set('prefilled_email', perfil.email);

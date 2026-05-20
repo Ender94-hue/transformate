@@ -124,6 +124,20 @@ async function canjearCodigo(codigo) {
   return { ok: true, agregados: data.map(d => d.out_id) };
 }
 
+// ---------- RECLAMAR COMPRAS POR EMAIL (compradores de funnel) ----------
+// Tras registrarse/loguearse, reclama cualquier compra hecha en Stripe
+// con el mismo email (antes de tener cuenta). Devuelve cuántas reclamó.
+async function reclamarComprasEmail() {
+  try {
+    const { data, error } = await supa.rpc('reclamar_compras_email');
+    if (error) { console.warn('reclamar_compras_email:', error.message); return 0; }
+    return data || 0;
+  } catch (e) {
+    console.warn('reclamar_compras_email error:', e);
+    return 0;
+  }
+}
+
 // ---------- DESBLOQUEOS DEL USUARIO ----------
 // Devuelve un Set con los ids de productos desbloqueados (cache simple por sesión).
 let _cacheDesbloqueos = null;

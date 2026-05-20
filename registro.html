@@ -74,6 +74,13 @@
       const successBox = document.getElementById('success');
       const submitBtn = form.querySelector('button[type="submit"]');
 
+      // Llega desde el pago en Stripe (funnel/VSL)
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('paid') === '1') {
+        successBox.innerHTML = '✓ <strong>¡Pago recibido!</strong> Crea tu cuenta con el <strong>MISMO correo</strong> que usaste para pagar y tendrás acceso inmediato a tu contenido.';
+        successBox.classList.add('show');
+      }
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         errorBox.classList.remove('show');

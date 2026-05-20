@@ -21,6 +21,9 @@ async function iniciar() {
   pintarHeader();
   conectarUI();
 
+  // Reclama compras hechas en Stripe con este email (funnel/VSL) antes de cargar
+  const reclamadas = await reclamarComprasEmail();
+
   await Promise.all([
     cargarCategorias(),
     cargarCatalogo(),
@@ -31,6 +34,10 @@ async function iniciar() {
   pintarSidebar();
   pintarChips();
   render();
+
+  if (reclamadas > 0) {
+    mostrarToast('✓ ¡Tu compra fue activada! Ya tienes acceso.');
+  }
 
   // Si volvemos de Stripe con ?paid=1, esperamos al webhook y refrescamos
   const urlParams = new URLSearchParams(window.location.search);

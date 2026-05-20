@@ -75,9 +75,9 @@ async function detectarMercado() {
 function formatPrecio(categoria) {
   if (MERCADO === 'USD') {
     const usd = categoria.precio_usd != null ? categoria.precio_usd : categoria.precio;
-    return '$' + usd + ' USD';
+    return '$' + Number(usd).toFixed(2) + ' USD';
   }
-  return categoria.precio + ' €';
+  return Number(categoria.precio).toFixed(2).replace('.', ',') + ' €';
 }
 
 // ============================================================

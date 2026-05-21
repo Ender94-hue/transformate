@@ -36,7 +36,7 @@ async function iniciar() {
   render();
 
   if (reclamadas > 0) {
-    mostrarToast('✓ ¡Tu compra fue activada! Ya tienes acceso.');
+    mostrarToast('✓ Your purchase is active! You now have access.');
   }
 
   // Si volvemos de Stripe con ?paid=1, esperamos al webhook y refrescamos
@@ -49,7 +49,7 @@ async function iniciar() {
 
 // ---------- PAGO: tras volver de Stripe esperamos al webhook ----------
 async function esperarConfirmacionPago() {
-  mostrarToast('Procesando tu pago…');
+  mostrarToast('Processing your payment…');
   const prev = _cacheDesbloqueos ? _cacheDesbloqueos.size : 0;
   for (let i = 0; i < 20; i++) {
     await new Promise(r => setTimeout(r, 1500));
@@ -60,11 +60,11 @@ async function esperarConfirmacionPago() {
       pintarSidebar();
       pintarChips();
       render();
-      mostrarToast('✓ ¡Pago confirmado! Tus contenidos están desbloqueados.');
+      mostrarToast('✓ Payment confirmed! Your content is unlocked.');
       return;
     }
   }
-  mostrarToast('El pago se está procesando. Recarga en 1 minuto si no aparece.');
+  mostrarToast('Your payment is processing. Refresh in 1 minute if it doesn\'t appear.');
 }
 
 // ---------- HEADER ----------
@@ -72,9 +72,9 @@ function pintarHeader() {
   const nombreCorto = perfil.nombre.split(' ')[0];
   const hora = new Date().getHours();
   document.getElementById('greeting').textContent =
-    hora < 12 ? `Buenos días, ${nombreCorto} 🌅`
-    : hora < 19 ? `Buenas tardes, ${nombreCorto} ☀️`
-    : `Buenas noches, ${nombreCorto} 🌙`;
+    hora < 12 ? `Good morning, ${nombreCorto} 🌅`
+    : hora < 19 ? `Good afternoon, ${nombreCorto} ☀️`
+    : `Good evening, ${nombreCorto} 🌙`;
 
   document.getElementById('userName').textContent = perfil.nombre;
   document.getElementById('userEmail').textContent = perfil.email;
@@ -171,10 +171,10 @@ function setCategoria(slug) {
   pintarChips();
   const titleEl = document.getElementById('sectionTitle');
   if (slug === 'mios') {
-    titleEl.textContent = 'Mis contenidos';
+    titleEl.textContent = 'My content';
     titleEl.style.display = '';
   } else if (slug === 'todos') {
-    titleEl.textContent = 'Explora todo el catálogo';
+    titleEl.textContent = 'Explore the whole catalog';
     titleEl.style.display = '';
   } else {
     // En modo categoría única el título lo muestra el .carousel-head: ocultamos el h2 del section-head
@@ -275,8 +275,8 @@ function renderGrid(grid) {
     grid.innerHTML = `
       <div class="empty" style="grid-column:1/-1">
         <div style="font-size:50px;margin-bottom:10px">🕊️</div>
-        <h3>Aún no has desbloqueado contenidos</h3>
-        <p>Compra una categoría desde el menú lateral.</p>
+        <h3>You haven't unlocked any content yet</h3>
+        <p>Buy a category from the side menu.</p>
       </div>`;
     return;
   }
@@ -306,8 +306,8 @@ function renderCarruseles(container) {
         <div class="carousel-head">
           <h2>${cat.icono} ${cat.label}</h2>
           <div class="arrows">
-            <button class="carousel-arrow" data-dir="prev" aria-label="Anterior">‹</button>
-            <button class="carousel-arrow" data-dir="next" aria-label="Siguiente">›</button>
+            <button class="carousel-arrow" data-dir="prev" aria-label="Previous">‹</button>
+            <button class="carousel-arrow" data-dir="next" aria-label="Next">›</button>
           </div>
         </div>
         <div class="carousel">
@@ -321,8 +321,8 @@ function renderCarruseles(container) {
     html = `
       <div class="empty">
         <div style="font-size:50px;margin-bottom:10px">🕊️</div>
-        <h3>Nada por aquí</h3>
-        <p>Prueba con otra búsqueda.</p>
+        <h3>Nothing here</h3>
+        <p>Try another search.</p>
       </div>`;
   }
 
@@ -437,9 +437,9 @@ function cardHTML(p) {
         </div>
         <div class="card-lock">
           <div class="card-lock-icon">🔒</div>
-          <div class="card-lock-text">${cat ? 'Desbloquear ' + cat.label : 'Desbloquear'}</div>
+          <div class="card-lock-text">${cat ? 'Unlock ' + cat.label : 'Unlock'}</div>
         </div>
-        ${desbloqueado ? '<button class="card-play" aria-label="Reproducir">▶</button>' : ''}
+        ${desbloqueado ? '<button class="card-play" aria-label="Play">▶</button>' : ''}
       </div>
       <h3 class="card-title">${p.titulo}</h3>
     </article>
@@ -453,7 +453,7 @@ function abrirModalCompraCategoria(categoria) {
   document.getElementById('modalIcon').textContent = categoria.icono;
   document.getElementById('modalTitle').textContent = categoria.label;
   document.getElementById('modalDesc').textContent =
-    categoria.descripcion || `Desbloquea todos los contenidos de ${categoria.label}.`;
+    categoria.descripcion || `Unlock all the content in ${categoria.label}.`;
   document.getElementById('modalPrice').textContent = formatPrecio(categoria);
   document.getElementById('modal').classList.add('show');
 }
@@ -463,7 +463,7 @@ async function simularCompraCategoria() {
   if (!categoriaActual) return;
   const link = obtenerLinkStripe(categoriaActual, perfil);
   if (!link) {
-    mostrarToast('Error: link de pago no configurado para esta categoría.');
+    mostrarToast('Error: payment link not configured for this category.');
     return;
   }
   // Cierra el modal y abre Stripe en la misma pestaña
@@ -496,7 +496,7 @@ async function canjearDesdeModal() {
   pintarSidebar();
   pintarChips();
   render();
-  mostrarToast(`✓ Desbloqueamos ${r.agregados.length} ${r.agregados.length === 1 ? 'contenido' : 'contenidos'}`);
+  mostrarToast(`✓ We unlocked ${r.agregados.length} ${r.agregados.length === 1 ? 'item' : 'items'}`);
 }
 
 // ---------- TOAST ----------

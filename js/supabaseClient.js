@@ -16,8 +16,8 @@ window.supa = createClient(SUPABASE_URL, SUPABASE_KEY, {
 });
 
 // Categorías de navegación (NO son contenidos comprables)
-const CATEGORIA_DESCUBRIR = { slug: 'todos', label: 'Bienvenidos',     icono: '✨' };
-const CATEGORIA_MIOS      = { slug: 'mios',  label: 'Mis contenidos', icono: '💛' };
+const CATEGORIA_DESCUBRIR = { slug: 'todos', label: 'Welcome',      icono: '✨' };
+const CATEGORIA_MIOS      = { slug: 'mios',  label: 'My content',   icono: '💛' };
 
 // CATEGORIAS arranca con solo "Descubrir" y se rellena con las de Supabase
 let CATEGORIAS = [CATEGORIA_DESCUBRIR];

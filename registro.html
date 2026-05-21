@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Transform · Create Account</title>
+  <title>Transfórmate · Crear cuenta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
@@ -12,48 +12,48 @@
 <body>
   <div class="auth-wrap">
     <aside class="auth-hero">
-      <div class="auth-hero-brand">Transform <span>into who you want to be</span></div>
+      <div class="auth-hero-brand">Transfórmate <span>en quien quieres ser</span></div>
 
       <div class="auth-hero-content">
-        <h1>Start your<br/>transformation.</h1>
-        <p>Create your account and take the first step toward the person you want to be.</p>
+        <h1>Empieza tu<br/>transformación.</h1>
+        <p>Crea tu cuenta y da el primer paso hacia la persona que quieres ser.</p>
       </div>
 
       <div class="auth-hero-footer">
-        <span>🔒 Your access, your password</span>
-        <span>♾️ Lifetime access</span>
+        <span>🔒 Tu acceso, tu contraseña</span>
+        <span>♾️ De por vida</span>
       </div>
     </aside>
 
     <main class="auth-form-side">
       <div class="auth-card">
-        <h2>Create my account</h2>
-        <p class="sub">Your access is linked to your email and the password you choose.</p>
+        <h2>Crear mi cuenta</h2>
+        <p class="sub">Tu acceso queda asociado a tu correo y a la contraseña que elijas.</p>
 
         <div id="error" class="error-msg"></div>
         <div id="success" class="error-msg" style="background:#E8F5E0;color:#3F7A2E"></div>
 
         <form id="registerForm" autocomplete="on">
           <div class="form-group">
-            <label for="nombre">Your name</label>
-            <input type="text" id="nombre" placeholder="e.g. Sofia" required />
+            <label for="nombre">Tu nombre</label>
+            <input type="text" id="nombre" placeholder="Ej. Sofía" required />
           </div>
 
           <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="you@email.com" required />
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" placeholder="tu@correo.com" required />
           </div>
 
           <div class="form-group">
-            <label for="password">Create your password</label>
-            <input type="password" id="password" placeholder="At least 6 characters" required />
+            <label for="password">Crea tu contraseña</label>
+            <input type="password" id="password" placeholder="Mínimo 6 caracteres" required />
           </div>
 
-          <button type="submit" class="btn btn-primary">Create my account</button>
+          <button type="submit" class="btn btn-primary">Crear mi cuenta</button>
         </form>
 
         <div class="auth-bottom">
-          Already have an account? <a href="index.html">Sign in</a>
+          ¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a>
         </div>
       </div>
     </main>
@@ -77,7 +77,7 @@
       // Llega desde el pago en Stripe (funnel/VSL)
       const params = new URLSearchParams(window.location.search);
       if (params.get('paid') === '1') {
-        successBox.innerHTML = '✓ <strong>Payment received!</strong> Create your account with the <strong>SAME email</strong> you used to pay and you\'ll get instant access to your content.';
+        successBox.innerHTML = '✓ <strong>¡Pago recibido!</strong> Crea tu cuenta con el <strong>MISMO correo</strong> que usaste para pagar y tendrás acceso inmediato a tu contenido.';
         successBox.classList.add('show');
       }
 
@@ -86,7 +86,7 @@
         errorBox.classList.remove('show');
         successBox.classList.remove('show');
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Creating…';
+        submitBtn.textContent = 'Creando…';
 
         const r = await registrarUsuario({
           nombre: document.getElementById('nombre').value,
@@ -95,7 +95,7 @@
         });
 
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Create my account';
+        submitBtn.textContent = 'Crear mi cuenta';
 
         if (!r.ok) {
           errorBox.textContent = r.error;
@@ -103,7 +103,7 @@
           return;
         }
 
-        successBox.textContent = 'Account created! Taking you to your space.';
+        successBox.textContent = '¡Cuenta creada! Te enviamos a tu espacio.';
         successBox.classList.add('show');
 
         setTimeout(() => window.location.href = 'dashboard.html', 1000);

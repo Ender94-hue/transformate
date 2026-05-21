@@ -43,13 +43,13 @@ async function registrarUsuario({ nombre, email, password, codigo }) {
   codigo = (codigo || '').trim().toUpperCase();
 
   if (!nombre || !email || !password) {
-    return { ok: false, error: 'Please fill in all fields.' };
+    return { ok: false, error: 'Completa todos los campos.' };
   }
   if (!email.includes('@')) {
-    return { ok: false, error: 'Enter a valid email.' };
+    return { ok: false, error: 'Ingresa un email válido.' };
   }
   if (password.length < 6) {
-    return { ok: false, error: 'Password must be at least 6 characters.' };
+    return { ok: false, error: 'La contraseña debe tener al menos 6 caracteres.' };
   }
 
   // 1) Crear usuario en Supabase Auth
@@ -62,7 +62,7 @@ async function registrarUsuario({ nombre, email, password, codigo }) {
   if (error) {
     // Error humano-friendly
     if (error.message.toLowerCase().includes('already')) {
-      return { ok: false, error: 'This email is already registered. Please sign in.' };
+      return { ok: false, error: 'Este correo ya está registrado. Inicia sesión.' };
     }
     return { ok: false, error: error.message };
   }
@@ -73,7 +73,7 @@ async function registrarUsuario({ nombre, email, password, codigo }) {
   if (!data.session) {
     return {
       ok: false,
-      error: 'We sent you an email to confirm your account. Confirm it and sign in again.',
+      error: 'Te enviamos un correo para confirmar tu cuenta. Confírmalo y vuelve a iniciar sesión.',
     };
   }
 
@@ -98,12 +98,12 @@ async function registrarUsuario({ nombre, email, password, codigo }) {
 async function iniciarSesion({ email, password }) {
   email = (email || '').trim().toLowerCase();
   if (!email || !password) {
-    return { ok: false, error: 'Enter your email and password.' };
+    return { ok: false, error: 'Ingresa correo y contraseña.' };
   }
 
   const { data, error } = await supa.auth.signInWithPassword({ email, password });
   if (error) {
-    return { ok: false, error: 'Incorrect credentials.' };
+    return { ok: false, error: 'Credenciales incorrectas.' };
   }
   return { ok: true, usuario: { id: data.user.id, email } };
 }
@@ -112,14 +112,14 @@ async function iniciarSesion({ email, password }) {
 // Llama a la función SQL canjear_codigo (segura, server-side)
 async function canjearCodigo(codigo) {
   codigo = (codigo || '').trim().toUpperCase();
-  if (!codigo) return { ok: false, error: 'Enter a code.' };
+  if (!codigo) return { ok: false, error: 'Ingresa un código.' };
 
   const { data, error } = await supa.rpc('canjear_codigo', { p_codigo: codigo });
   if (error) {
     return { ok: false, error: error.message };
   }
   if (!data || data.length === 0) {
-    return { ok: false, error: 'This code is not valid.' };
+    return { ok: false, error: 'El código no es válido.' };
   }
   return { ok: true, agregados: data.map(d => d.out_id) };
 }

@@ -19,6 +19,9 @@ window.supa = createClient(SUPABASE_URL, SUPABASE_KEY, {
 const CATEGORIA_DESCUBRIR = { slug: 'todos', label: 'Bienvenidos',     icono: '✨' };
 const CATEGORIA_MIOS      = { slug: 'mios',  label: 'Mis contenidos', icono: '💛' };
 
+// Categorías GRATIS: se ven siempre desbloqueadas para todos (sin compra ni código)
+const CATEGORIAS_GRATIS = ['metodo-rcla'];
+
 // CATEGORIAS arranca con solo "Descubrir" y se rellena con las de Supabase
 let CATEGORIAS = [CATEGORIA_DESCUBRIR];
 

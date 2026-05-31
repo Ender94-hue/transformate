@@ -102,6 +102,7 @@ async function cargarCatalogo() {
 // AL MENOS UN producto desbloqueado de esa categoría.
 function categoriaDesbloqueada(slug) {
   if (slug === 'todos' || slug === 'mios') return true;
+  if (CATEGORIAS_GRATIS.includes(slug)) return true;   // categorías gratis: siempre abiertas
   const productosCat = CATALOGO.filter(p => p.categoria === slug);
   return productosCat.some(p => tieneDesbloqueado(p.id));
 }

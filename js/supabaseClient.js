@@ -30,6 +30,9 @@ const SLUG_CHAT = 'mentalidad';
 // Correo de la cuenta que puede RESPONDER en el chat (admin).
 const ADMIN_EMAIL = 'nancy.s@live.nl';
 
+// Nombre con el que se firman las respuestas del admin en el chat.
+const ADMIN_NOMBRE = 'Ender';
+
 // CATEGORIAS arranca con solo "Descubrir" y se rellena con las de Supabase
 let CATEGORIAS = [CATEGORIA_DESCUBRIR];
 

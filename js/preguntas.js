@@ -106,7 +106,7 @@ function preguntaHTML(p) {
   if (p.respuesta && p.respuesta.trim()) {
     bloqueResp = `
       <div class="q-answer">
-        <div class="q-answer-label">🌟 Respuesta</div>
+        <div class="q-answer-label">🌟 Respuesta de ${escapeHTML(ADMIN_NOMBRE)}</div>
         <div class="q-answer-text">${nl2br(escapeHTML(p.respuesta))}</div>
       </div>`;
   } else if (esAdmin) {

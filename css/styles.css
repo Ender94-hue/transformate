@@ -1177,19 +1177,19 @@ a:hover { opacity: 0.8; }
     flex-direction: row;
     padding: 14px 16px;
     align-items: center;
+    justify-content: center;
     overflow-x: auto;
     gap: 14px;
   }
   .sidebar::-webkit-scrollbar { display: none; }
   .sidebar { scrollbar-width: none; }
-  .sidebar-brand { margin-bottom: 0; margin-right: 0; flex-shrink: 0; gap: 10px; padding-left: 0; }
+  .sidebar-brand { margin: 0; flex-shrink: 0; gap: 0; padding-left: 0; }
   .sidebar-brand span { display: none; }
-  .brand-logo { width: 40px; height: 40px; }
-  .brand-text { font-size: 17px; }
-  /* En móvil la navegación se hace con los chips de abajo: ocultamos el menú del top */
+  .brand-logo { width: 48px; height: 48px; }
+  /* En móvil solo el logo centrado: ocultamos el texto, el menú y el logout */
+  .brand-text { display: none; }
   .nav { display: none; }
-  /* Mostrar solo el botón de logout en el footer, no el chip completo */
-  .sidebar-foot { margin-left: auto; flex-shrink: 0; padding: 0; border: none; }
+  .sidebar-foot { display: none; }
   .user-chip { padding: 0; background: none; border: none; gap: 0; }
   .user-chip .avatar,
   .user-chip .info { display: none; }

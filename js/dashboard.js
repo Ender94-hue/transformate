@@ -31,9 +31,15 @@ async function iniciar() {
     detectarMercado(),
   ]);
 
-  pintarSidebar();
-  pintarChips();
-  render();
+  // Entrada directa: abrimos en la primera categoría (sin pantalla de "Bienvenidos")
+  const primera = categoriasComprables()[0];
+  if (primera) {
+    setCategoria(primera.slug);
+  } else {
+    pintarSidebar();
+    pintarChips();
+    render();
+  }
 
   if (reclamadas > 0) {
     mostrarToast('✓ ¡Tu compra fue activada! Ya tienes acceso.');
@@ -110,10 +116,7 @@ function categoriaDesbloqueada(slug) {
 // ---------- SIDEBAR ----------
 function pintarSidebar() {
   const nav = document.getElementById('nav');
-  const items = [
-    CATEGORIA_DESCUBRIR,
-    ...categoriasComprables(),
-  ];
+  const items = [...categoriasComprables()];
   nav.innerHTML = items.map(cat => {
     const esNavegacion = cat.slug === 'todos' || cat.slug === 'mios';
     const desbloqueada = esNavegacion || categoriaDesbloqueada(cat.slug);
@@ -148,7 +151,7 @@ function pintarSidebar() {
 // ---------- CHIPS (filtros encima del grid) ----------
 function pintarChips() {
   const chipsEl = document.getElementById('chips');
-  const items = [CATEGORIA_DESCUBRIR, ...categoriasComprables()];
+  const items = [...categoriasComprables()];
   chipsEl.innerHTML = '';
   items.forEach(cat => {
     const chip = document.createElement('button');
@@ -206,17 +209,6 @@ function conectarUI() {
   document.getElementById('modalCodigoClose').addEventListener('click', () => modalCodigo.classList.remove('show'));
   modalCodigo.addEventListener('click', (e) => { if (e.target === modalCodigo) modalCodigo.classList.remove('show'); });
   document.getElementById('canjearBtn').addEventListener('click', canjearDesdeModal);
-
-  // Botón "Explorar el catálogo" de la página de Bienvenida
-  const exploreBtn = document.getElementById('welcomeExplore');
-  if (exploreBtn) {
-    exploreBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      // Scroll suave hasta los carruseles
-      const carouseles = document.getElementById('carouseles');
-      if (carouseles) carouseles.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
 }
 
 // ---------- RENDER ----------
@@ -228,24 +220,11 @@ function render() {
   const grid = document.getElementById('grid');
   const mainHeader = document.getElementById('mainHeader');
 
-  // El encabezado (saludo + título + buscador) se oculta en Bienvenidos
-  // para que el video suba, y se muestra en el resto de secciones.
-  if (mainHeader) mainHeader.style.display = (filtroCategoria === 'todos') ? 'none' : 'flex';
-
-  // ---- Modo "Bienvenidos" (página inicial con video) ----
-  if (filtroCategoria === 'todos') {
-    welcome.style.display = 'block';
-    sectionHead.style.display = 'flex';
-    chipsEl.style.display = 'flex';
-    carouselesEl.style.display = 'block';
-    grid.style.display = 'none';
-    renderCarruseles(carouselesEl);
-    return;
-  }
+  if (mainHeader) mainHeader.style.display = 'flex';
+  if (welcome) welcome.style.display = 'none';
 
   // ---- Modo "Mis contenidos" → grilla con desbloqueados ----
   if (filtroCategoria === 'mios') {
-    welcome.style.display = 'none';
     sectionHead.style.display = 'flex';
     chipsEl.style.display = 'none';
     carouselesEl.style.display = 'none';
@@ -255,7 +234,6 @@ function render() {
   }
 
   // ---- Modo categoría única → un solo carrusel ----
-  welcome.style.display = 'none';
   sectionHead.style.display = 'flex';
   chipsEl.style.display = 'flex';
   carouselesEl.style.display = 'block';

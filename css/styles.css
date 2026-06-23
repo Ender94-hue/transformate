@@ -1164,10 +1164,12 @@ a:hover { opacity: 0.8; }
   }
   .sidebar::-webkit-scrollbar { display: none; }
   .sidebar { scrollbar-width: none; }
-  .sidebar-brand { margin-bottom: 0; margin-right: 0; flex-shrink: 0; font-size: 14px; }
+  .sidebar-brand { margin-bottom: 0; margin-right: 0; flex-shrink: 0; gap: 10px; padding-left: 0; }
   .sidebar-brand span { display: none; }
-  .nav { flex-direction: row; flex-shrink: 0; gap: 4px; }
-  .nav a { padding: 8px 12px; white-space: nowrap; font-size: 13px; }
+  .brand-logo { width: 40px; height: 40px; }
+  .brand-text { font-size: 17px; }
+  /* En móvil la navegación se hace con los chips de abajo: ocultamos el menú del top */
+  .nav { display: none; }
   /* Mostrar solo el botón de logout en el footer, no el chip completo */
   .sidebar-foot { margin-left: auto; flex-shrink: 0; padding: 0; border: none; }
   .user-chip { padding: 0; background: none; border: none; gap: 0; }
@@ -1202,17 +1204,26 @@ a:hover { opacity: 0.8; }
   .section-head h2 { font-size: 19px; }
   .section-head a { font-size: 12px; }
 
-  /* Chips: tira horizontal scrollable */
+  /* Chips: tira horizontal scrollable con degradado de "hay más →" */
+  .chips-wrap { position: relative; }
   .chips {
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    margin: 0 -14px;
-    padding: 0 14px 4px;
+    padding: 0 0 4px;
   }
   .chips::-webkit-scrollbar { display: none; }
   .chip { flex-shrink: 0; font-size: 13px; padding: 8px 14px; }
+  /* Degradado en el borde derecho: indica que se puede deslizar */
+  .chips-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 6px;
+    width: 44px;
+    background: linear-gradient(to right, rgba(11, 8, 20, 0), var(--crema) 85%);
+    pointer-events: none;
+  }
 
   /* Carrusel */
   .carousel-section { margin-bottom: 28px; }

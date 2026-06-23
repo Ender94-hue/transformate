@@ -193,10 +193,13 @@ function setCategoria(slug) {
 // ---------- UI EVENTS ----------
 function conectarUI() {
   document.getElementById('logoutBtn').addEventListener('click', cerrarSesion);
-  document.getElementById('search').addEventListener('input', (e) => {
-    busqueda = e.target.value.toLowerCase().trim();
-    render();
-  });
+  const searchEl = document.getElementById('search');
+  if (searchEl) {
+    searchEl.addEventListener('input', (e) => {
+      busqueda = e.target.value.toLowerCase().trim();
+      render();
+    });
+  }
 
   const modal = document.getElementById('modal');
   document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('show'));

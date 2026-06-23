@@ -20,7 +20,8 @@ const CATEGORIA_DESCUBRIR = { slug: 'todos', label: 'Bienvenidos',     icono: '�
 const CATEGORIA_MIOS      = { slug: 'mios',  label: 'Mis contenidos', icono: '💛' };
 
 // Categorías GRATIS: se ven siempre desbloqueadas para todos (sin compra ni código)
-const CATEGORIAS_GRATIS = ['metodo-rcla'];
+// (vacío: Método RCLE ahora es de pago, va dentro del pack junto con Rituales)
+const CATEGORIAS_GRATIS = [];
 
 // CATEGORIAS arranca con solo "Descubrir" y se rellena con las de Supabase
 let CATEGORIAS = [CATEGORIA_DESCUBRIR];

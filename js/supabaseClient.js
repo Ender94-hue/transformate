@@ -23,6 +23,13 @@ const CATEGORIA_MIOS      = { slug: 'mios',  label: 'Mis contenidos', icono: '�
 // (vacío: Método RCLE ahora es de pago, va dentro del pack junto con Rituales)
 const CATEGORIAS_GRATIS = [];
 
+// Sección "Preguntas Anónimas": no es contenido, es un chat/muro de preguntas.
+// (reusa el slug 'mentalidad'; el front la trata especial y la deja siempre abierta)
+const SLUG_CHAT = 'mentalidad';
+
+// Correo de la cuenta que puede RESPONDER en el chat (admin).
+const ADMIN_EMAIL = 'nancy.s@live.nl';
+
 // CATEGORIAS arranca con solo "Descubrir" y se rellena con las de Supabase
 let CATEGORIAS = [CATEGORIA_DESCUBRIR];
 

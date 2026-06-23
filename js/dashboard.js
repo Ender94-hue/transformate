@@ -7,6 +7,7 @@
 
 let CATALOGO = [];
 let perfil = null;
+let esAdmin = false;
 let filtroCategoria = 'todos';
 let busqueda = '';
 let categoriaActual = null;   // categoría seleccionada en el modal de compra
@@ -17,6 +18,7 @@ async function iniciar() {
   await requerirSesion();
   perfil = await obtenerPerfil();
   if (!perfil) { cerrarSesion(); return; }
+  esAdmin = (perfil.email || '').trim().toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
   pintarHeader();
   conectarUI();
@@ -108,6 +110,7 @@ async function cargarCatalogo() {
 // AL MENOS UN producto desbloqueado de esa categoría.
 function categoriaDesbloqueada(slug) {
   if (slug === 'todos' || slug === 'mios') return true;
+  if (slug === SLUG_CHAT) return true;                 // chat de preguntas: siempre abierto
   if (CATEGORIAS_GRATIS.includes(slug)) return true;   // categorías gratis: siempre abiertas
   const productosCat = CATALOGO.filter(p => p.categoria === slug);
   return productosCat.some(p => tieneDesbloqueado(p.id));
@@ -218,10 +221,22 @@ function render() {
   const chipsEl = document.getElementById('chips');
   const carouselesEl = document.getElementById('carouseles');
   const grid = document.getElementById('grid');
+  const chatEl = document.getElementById('chat');
   const mainHeader = document.getElementById('mainHeader');
 
   if (mainHeader) mainHeader.style.display = 'flex';
   if (welcome) welcome.style.display = 'none';
+  if (chatEl) chatEl.style.display = 'none';
+
+  // ---- Modo "Preguntas Anónimas" (chat/muro) ----
+  if (filtroCategoria === SLUG_CHAT) {
+    sectionHead.style.display = 'none';
+    chipsEl.style.display = 'flex';
+    carouselesEl.style.display = 'none';
+    grid.style.display = 'none';
+    if (chatEl) { chatEl.style.display = 'block'; renderChat(chatEl); }
+    return;
+  }
 
   // ---- Modo "Mis contenidos" → grilla con desbloqueados ----
   if (filtroCategoria === 'mios') {

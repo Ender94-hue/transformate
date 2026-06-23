@@ -1269,3 +1269,139 @@ a:hover { opacity: 0.8; }
   .play-big { width: 60px; height: 60px; font-size: 24px; }
   .time-row { font-size: 11px; }
 }
+
+/* ============================================================
+   PREGUNTAS ANÓNIMAS · chat / muro
+   ============================================================ */
+.chat { max-width: 760px; }
+
+.chat-head { margin-bottom: 22px; }
+.chat-head h2 { font-size: 28px; margin-bottom: 6px; }
+.chat-head p { color: var(--texto-suave); font-size: 14px; }
+
+/* Caja para publicar */
+.chat-compose {
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  padding: 16px;
+  margin-bottom: 26px;
+  box-shadow: var(--sombra);
+}
+.chat-compose textarea,
+.q-answer-input {
+  width: 100%;
+  resize: vertical;
+  background: var(--crema-soft);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-sm);
+  color: var(--texto);
+  font-family: inherit;
+  font-size: 15px;
+  padding: 12px 14px;
+  outline: none;
+}
+.chat-compose textarea:focus,
+.q-answer-input:focus { border-color: var(--naranja-suave); }
+
+.emoji-bar { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0 4px; }
+.emoji-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 20px;
+  line-height: 1;
+  padding: 6px;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+.emoji-btn:hover { background: var(--crema-soft); transform: scale(1.15); }
+
+.chat-compose-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.anon-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--texto-suave);
+  cursor: pointer;
+}
+.anon-toggle input { width: 16px; height: 16px; accent-color: var(--naranja-suave); }
+.anon-toggle strong { color: var(--naranja-fuerte); }
+
+/* Lista de preguntas */
+.chat-list { display: flex; flex-direction: column; gap: 16px; }
+.chat-loading, .chat-empty {
+  color: var(--texto-suave);
+  text-align: center;
+  padding: 30px 10px;
+  font-size: 15px;
+}
+
+.q-card {
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  padding: 16px 18px;
+}
+.q-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.q-avatar {
+  width: 38px; height: 38px;
+  flex: 0 0 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px;
+  background: linear-gradient(135deg, var(--naranja-suave), var(--naranja-claro));
+  color: #1A1428;
+}
+.q-avatar.anon {
+  background: var(--crema-soft);
+  border: 1px solid var(--linea);
+  font-size: 18px;
+}
+.q-meta { display: flex; flex-direction: column; line-height: 1.2; }
+.q-author { font-weight: 600; color: var(--texto); font-size: 15px; }
+.q-date { color: var(--texto-suave); font-size: 12px; }
+.q-del {
+  margin-left: auto;
+  background: transparent; border: none;
+  color: var(--texto-suave); font-size: 16px;
+  cursor: pointer; padding: 4px 8px; border-radius: 8px;
+}
+.q-del:hover { background: var(--crema-soft); color: #E57373; }
+
+.q-text { color: var(--texto); font-size: 15px; white-space: pre-wrap; }
+
+.q-pending { margin-top: 12px; color: var(--texto-suave); font-size: 13px; font-style: italic; }
+
+/* Respuesta del admin */
+.q-answer {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--naranja-suave);
+  background: rgba(212, 165, 116, 0.08);
+  border-radius: 0 var(--radio-sm) var(--radio-sm) 0;
+}
+.q-answer-label {
+  font-size: 12px; font-weight: 700;
+  color: var(--naranja-fuerte);
+  text-transform: uppercase; letter-spacing: .5px;
+  margin-bottom: 4px;
+}
+.q-answer-text { color: var(--texto); font-size: 15px; }
+
+/* Caja de respuesta del admin */
+.q-answer-form { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.q-answer-form .btn { align-self: flex-start; padding: 8px 18px; font-size: 14px; }
+
+@media (max-width: 640px) {
+  .chat-compose-foot { flex-direction: column; align-items: stretch; }
+  .chat-compose-foot .btn { width: 100%; }
+}

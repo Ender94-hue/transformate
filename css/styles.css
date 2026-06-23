@@ -1192,7 +1192,10 @@ a:hover { opacity: 0.8; }
   .main-header h1 { font-size: 24px; line-height: 1.2; }
   .greeting { font-size: 13px; }
   .search-bar { width: 100%; padding: 10px 14px; }
-  .search-bar input { font-size: 14px; }
+  /* 16px evita el zoom automático de iOS al enfocar inputs */
+  .search-bar input,
+  .form-group input,
+  #codigoInput { font-size: 16px; }
 
   /* Section head */
   .section-head { margin: 22px 0 14px; }
@@ -1401,7 +1404,38 @@ a:hover { opacity: 0.8; }
 .q-answer-form { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .q-answer-form .btn { align-self: flex-start; padding: 8px 18px; font-size: 14px; }
 
+/* ---------- Chat en móvil ---------- */
 @media (max-width: 640px) {
-  .chat-compose-foot { flex-direction: column; align-items: stretch; }
-  .chat-compose-foot .btn { width: 100%; }
+  .chat { max-width: 100%; }
+  .chat-head { margin-bottom: 16px; }
+  .chat-head h2 { font-size: 22px; }
+  .chat-head p { font-size: 13px; }
+
+  .chat-compose { padding: 12px; margin-bottom: 20px; }
+  /* font-size 16px evita que iOS haga zoom al enfocar el campo */
+  .chat-compose textarea,
+  .q-answer-input { font-size: 16px; padding: 11px 12px; }
+
+  /* Barra de emojis: tira horizontal deslizable (no se apila en varias filas) */
+  .emoji-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin: 10px -2px 4px;
+  }
+  .emoji-bar::-webkit-scrollbar { display: none; }
+  .emoji-btn { flex-shrink: 0; font-size: 22px; padding: 6px; }
+
+  .chat-compose-foot { flex-direction: column; align-items: stretch; gap: 10px; }
+  .anon-toggle { font-size: 14px; }
+  .anon-toggle input { width: 20px; height: 20px; }
+  .chat-compose-foot .btn { width: 100%; padding: 13px; }
+
+  .chat-list { gap: 12px; }
+  .q-card { padding: 14px; }
+  .q-head { gap: 10px; margin-bottom: 8px; }
+  .q-avatar { width: 34px; height: 34px; flex-basis: 34px; }
+  .q-text, .q-answer-text { font-size: 15px; }
+  .q-answer-form .btn { align-self: stretch; width: 100%; }
 }
